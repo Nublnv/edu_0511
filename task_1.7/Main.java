@@ -10,6 +10,6 @@ public class Main {
         b = scanner.nextInt();
         System.out.print("Введиие высоту бассейна: ");
         c = scanner.nextInt();
-        System.out.println("Объем бассейна: "+ a*b*c);
+        System.out.println("Объем бассейна: " + a*b*c);
     }
 }
