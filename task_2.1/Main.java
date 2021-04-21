@@ -1,15 +1,19 @@
 import java.util.Scanner;
 public class Main {
     public static void main(String[] args) {
-        String mama = "Мама";
-        String mila = "Мыла";
-        String rama = "Раму";
+        String[] stings ={ "Мама","Мыла","Раму"};
+        for (int i = 0; i< stings.length; i++)
+        {
+            for (int j = 0; j < stings.length; j++)
+            {
+                if(j!=i) {
+                    for (int k = 0; k < stings.length; k++) {
+                        if (k!=i && k!=j)
+                            System.out.println(stings[i] + stings[j] + stings[k]);
+                    }
+                }
+            }
+        }
 
-        System.out.println(mama + mila + rama);
-        System.out.println(mama + rama + mila );
-        System.out.println(mila + rama + mama);
-        System.out.println(mila + mama + rama);
-        System.out.println(rama + mama + mila);
-        System.out.println(rama + mila + mama);
     }
 }
