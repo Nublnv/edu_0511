@@ -1,5 +1,6 @@
 import java.io.*;
 import java.net.*;
+import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.Scanner;
 import java.util.Collection;
@@ -16,6 +17,12 @@ public class Main {
         String textInLine = "";
         char[] textInFileChar;
         ArrayList<Ip> ips = new ArrayList<>();
+        File file = new File("C:\\Users\\Mikhail\\Desktop\\good.txt");
+        if (file.exists()) {
+            if(file.delete()){
+                file.createNewFile();
+            }
+        }
         System.out.print("Введите путь к файлу: ");
         while(true) {
             filePath = scanner.nextLine();
@@ -54,16 +61,60 @@ public class Main {
             ips.add(new Ip(textInLine));
         }
         for (Ip ip:ips) {
-            new ConnectThread(ip).start();
+            //new ConnectThread(ip, file).start();
+            new Thread(new ConnectThreadRunnable(ip, file)).start();
         }
     }
 
     private static class ConnectThread extends Thread
     {
-        Ip ip;
-        public ConnectThread(Ip ip)
+        private Ip ip;
+        private File file;
+        public ConnectThread(Ip ip, File file)
         {
             this.ip = ip;
+            this.file = file;
+        }
+
+
+        @Override
+        public void run() {
+            try {
+                this.ip.test();
+            }
+            catch (Exception e)
+            {
+
+            }
+            finally {
+                System.out.println("ip: " + ip.getIp() + " port: " + ip.getPort() + " " + (ip.getIsGood()? "good":"bad"));
+            }
+            if (ip.getIsGood())
+            {
+                synchronized (file)
+                {
+                    try {
+                        FileWriter writer = new FileWriter(file, true);
+                        BufferedWriter bufferWriter = new BufferedWriter(writer);
+                        bufferWriter.write(ip.getIp() + ":" + ip.getPort() + "\n");
+                        bufferWriter.close();
+                    }
+                    catch (IOException e) {
+                        System.out.println(e);
+                    }
+                }
+            }
+        }
+    }
+
+    private static class ConnectThreadRunnable implements Runnable
+    {
+        private Ip ip;
+        private File file;
+        public ConnectThreadRunnable(Ip ip, File file)
+        {
+            this.ip = ip;
+            this.file = file;
         }
 
         @Override
@@ -76,9 +127,23 @@ public class Main {
 
             }
             finally {
-                System.out.println("ip: " + ip.getIp() + " port: " + ip.getPort() + " " + ip.getIsGood());
+                System.out.println("ip: " + ip.getIp() + " port: " + ip.getPort() + " " + (ip.getIsGood()? "good":"bad"));
             }
-
+            if (ip.getIsGood())
+            {
+                synchronized (file)
+                {
+                    try {
+                        FileWriter writer = new FileWriter(file, true);
+                        BufferedWriter bufferWriter = new BufferedWriter(writer);
+                        bufferWriter.write(ip.getIp() + ":" + ip.getPort() + "\n");
+                        bufferWriter.close();
+                    }
+                    catch (IOException e) {
+                        System.out.println(e);
+                    }
+                }
+            }
         }
     }
 }
