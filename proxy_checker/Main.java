@@ -63,6 +63,36 @@ public class Main {
         for (Ip ip:ips) {
             //new ConnectThread(ip, file).start();
             new Thread(new ConnectThreadRunnable(ip, file)).start();
+            /*new Runnable() {
+                @Override
+                public void run() {
+                    try {
+                        ip.test();
+                    }
+                    catch (Exception e)
+                    {
+
+                    }
+                    finally {
+                        System.out.println("ip: " + ip.getIp() + " port: " + ip.getPort() + " " + (ip.getIsGood()? "good":"bad"));
+                    }
+                    if (ip.getIsGood())
+                    {
+                        synchronized (file)
+                        {
+                            try {
+                                FileWriter writer = new FileWriter(file, true);
+                                BufferedWriter bufferWriter = new BufferedWriter(writer);
+                                bufferWriter.write(ip.getIp() + ":" + ip.getPort() + "\n");
+                                bufferWriter.close();
+                            }
+                            catch (IOException e) {
+                                System.out.println(e);
+                            }
+                        }
+                    }
+                }
+            };*/
         }
     }
 
