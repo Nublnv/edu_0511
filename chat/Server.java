@@ -29,7 +29,7 @@ public class Server {
                                 String request = in.readUTF(); // Ожидаем сообщение от клиента
                                 for (User user:users) {
                                     DataOutputStream userOut = new DataOutputStream(user.getSocket().getOutputStream());
-                                    if (user != currentUser) {
+                                    if (!user.equals(currentUser)) {
                                         userOut.writeUTF(currentUser.getUserName() + ": " + request);
                                     }
                                 }
